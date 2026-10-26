@@ -41,7 +41,7 @@ export function KeptList({ tracks, open, onClose, onRemove, name }: Props): Reac
               key={format}
               disabled={tracks.length === 0}
               onClick={() => window.api.exportPlaylist(tracks, format, name ?? undefined)}
-              className="flex-1 rounded-lg bg-fuchsia-600 py-2 text-sm font-medium uppercase hover:bg-fuchsia-500 disabled:opacity-30"
+              className="flex-1 rounded-lg bg-primary text-white py-2 text-sm font-medium uppercase hover:bg-primary-light disabled:opacity-30"
             >
               {format}
             </button>
@@ -62,7 +62,7 @@ function KeptItem({ track, onRemove }: { track: Track; onRemove(): void }): Reac
       <button
         onClick={onRemove}
         aria-label={`Rimuovi ${track.title}`}
-        className="shrink-0 text-neutral-500 hover:text-fuchsia-400"
+        className="shrink-0 text-neutral-500 hover:text-primary"
       >
         ✕
       </button>

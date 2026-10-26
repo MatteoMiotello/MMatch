@@ -110,7 +110,7 @@ function Toggle({ label, checked, onChange }: ToggleProps): React.JSX.Element {
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="size-4 accent-fuchsia-600"
+        className="size-4 accent-primary"
       />
     </label>
   )

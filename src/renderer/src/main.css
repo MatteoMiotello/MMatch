@@ -1,5 +1,19 @@
 @import 'tailwindcss';
 
+/* primary is the logo pink; #353535 (logo background) is the app background and the darks step up from it */
+@theme {
+  --color-primary: #ff5bde;
+  --color-primary-light: #ff85e7;
+  --color-neutral-100: #ffffff;
+  --color-neutral-950: #353535;
+  --color-neutral-900: #3f3f3f;
+  --color-neutral-800: #4a4a4a;
+  --color-neutral-700: #5c5c5c;
+  --color-neutral-600: #737373;
+  --color-neutral-500: #9a9a9a;
+  --color-neutral-400: #b5b5b5;
+}
+
 :root {
   color-scheme: dark;
   font-family: system-ui, sans-serif;

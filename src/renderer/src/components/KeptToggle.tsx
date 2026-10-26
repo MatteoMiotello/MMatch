@@ -16,7 +16,7 @@ export function KeptToggle({
         <circle cx="15" cy="18" r="2" />
       </svg>
       {count > 0 && (
-        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-fuchsia-500 px-1 text-xs font-semibold tabular-nums">
+        <span className="absolute -top-1 -right-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-primary text-white px-1 text-xs font-semibold tabular-nums">
           {count}
         </span>
       )}

@@ -8,6 +8,8 @@ const SAMPLE_SIZE = 12
 
 type Props = {
   playlist: Playlist
+  opening: boolean
+  disabled: boolean
   onOpen(): void
   onRename(name: string): void
   onClone(): void
@@ -16,6 +18,8 @@ type Props = {
 
 export function PlaylistCard({
   playlist,
+  opening,
+  disabled,
   onOpen,
   onRename,
   onClone,
@@ -52,10 +56,15 @@ export function PlaylistCard({
       {/* stretched button: the whole card opens the playlist, menu and input sit above it */}
       <button
         onClick={onOpen}
+        disabled={disabled}
         aria-label={`Apri ${playlist.name}`}
         className="absolute inset-0 rounded-2xl"
       />
-      <CoverMosaic tracks={playlist.kept} />
+      {/* clicks fall through the cover to the stretched button below */}
+      <div className="pointer-events-none relative">
+        <CoverMosaic tracks={playlist.kept} />
+        {opening && <OpeningOverlay />}
+      </div>
       <div className="flex items-start gap-1 px-1">
         <div className="min-w-0 flex-1">
           {renaming && (
@@ -93,7 +102,7 @@ function RenameInput({ name, onDone, onCancel }: RenameInputProps): React.JSX.El
       ref={inputRef}
       defaultValue={name}
       onKeyDown={onKeyDown}
-      className="relative w-full rounded bg-neutral-950 px-1 font-semibold outline-1 outline-fuchsia-500"
+      className="relative w-full rounded bg-neutral-950 px-1 font-semibold outline-1 outline-primary"
     />
   )
 }
@@ -130,6 +139,17 @@ function CoverMosaic({ tracks }: { tracks: Track[] }): React.JSX.Element {
           />
         </div>
       ))}
+    </div>
+  )
+}
+
+function OpeningOverlay(): React.JSX.Element {
+  return (
+    <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-neutral-950/60">
+      <span
+        aria-label="Apertura…"
+        className="size-9 animate-spin rounded-full border-3 border-white/30 border-t-primary"
+      />
     </div>
   )
 }

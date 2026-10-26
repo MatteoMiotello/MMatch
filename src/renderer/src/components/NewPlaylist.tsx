@@ -26,7 +26,7 @@ export function NewPlaylist({ loading, taken, onCreate }: Props): React.JSX.Elem
       <button
         popoverTarget={id}
         disabled={loading}
-        className="flex items-center gap-2 rounded-full bg-fuchsia-600 px-6 py-3 font-semibold transition-colors hover:bg-fuchsia-500 disabled:opacity-60"
+        className="flex items-center gap-2 rounded-full bg-primary text-white px-6 py-3 font-semibold transition-colors hover:bg-primary-light disabled:opacity-60"
       >
         <span className="text-xl leading-none">+</span>
         {loading ? 'Lettura tracce…' : 'Nuova'}
@@ -48,7 +48,7 @@ export function NewPlaylist({ loading, taken, onCreate }: Props): React.JSX.Elem
             className="rounded-lg bg-neutral-800 px-3 py-2 font-normal"
           />
         </label>
-        <button className="mt-3 w-full rounded-lg bg-fuchsia-600 py-2 text-sm font-medium hover:bg-fuchsia-500">
+        <button className="mt-3 w-full rounded-lg bg-primary text-white py-2 text-sm font-medium hover:bg-primary-light">
           Avanti →
         </button>
       </form>

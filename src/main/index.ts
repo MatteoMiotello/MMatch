@@ -152,7 +152,7 @@ function createWindow(): void {
     width: 1100,
     height: 720,
     show: false,
-    backgroundColor: '#0a0a0a',
+    backgroundColor: '#353535',
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
@@ -172,6 +172,8 @@ function createWindow(): void {
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId('com.mmatch')
+  // packaged builds take build/icon.icns; this shows the logo in the dock during `yarn dev` too
+  if (process.platform === 'darwin') app.dock?.setIcon(icon)
   app.on('browser-window-created', (_, window) => optimizer.watchWindowShortcuts(window))
 
   ipcMain.handle('pickFolder', () => pickFolder())

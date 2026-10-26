@@ -19,7 +19,7 @@ export function MissingFolders({ folders, onRelink, onRetry }: Props): React.JSX
             </span>
             <button
               onClick={() => onRelink(folder)}
-              className="shrink-0 rounded-full bg-fuchsia-600 px-4 py-1.5 text-sm font-medium hover:bg-fuchsia-500"
+              className="shrink-0 rounded-full bg-primary text-white px-4 py-1.5 text-sm font-medium hover:bg-primary-light"
             >
               Scegli cartella
             </button>
