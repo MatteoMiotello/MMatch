@@ -1,5 +1,6 @@
 import { useEffect, useState, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
+import { WAVEFORM_BARS } from '../lib/waveform'
 
 const VOLUME_KEY = 'mmatch.volume'
 
@@ -17,9 +18,10 @@ function formatTime(seconds: number): string {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`
 }
 
-type Props = { audioRef: RefObject<HTMLAudioElement | null> }
+// null while the track is still being decoded
+type Props = { audioRef: RefObject<HTMLAudioElement | null>; peaks: number[] | null }
 
-export function AudioControls({ audioRef }: Props): React.JSX.Element {
+export function AudioControls({ audioRef, peaks }: Props): React.JSX.Element {
   const { t } = useTranslation()
   const [time, setTime] = useState(0)
   const [duration, setDuration] = useState(0)
@@ -67,7 +69,7 @@ export function AudioControls({ audioRef }: Props): React.JSX.Element {
 
   return (
     <div className="flex flex-col gap-2 rounded-xl bg-black/30 px-3 py-2.5 text-white backdrop-blur-md">
-      <Slider label={t('position')} value={duration ? time / duration : 0} onChange={seek} />
+      <Waveform peaks={peaks} value={duration ? time / duration : 0} onChange={seek} />
       <div className="flex items-center justify-between text-xs text-white/70 tabular-nums">
         <span>
           {formatTime(time)} / {formatTime(duration)}
@@ -99,6 +101,38 @@ function Slider({ label, value, onChange }: SliderProps): React.JSX.Element {
         step="any"
         value={value}
         aria-label={label}
+        onChange={(e) => onChange(e.target.valueAsNumber)}
+        className="absolute inset-0 w-full cursor-pointer opacity-0"
+      />
+    </div>
+  )
+}
+
+type WaveformProps = { peaks: number[] | null; value: number; onChange(value: number): void }
+
+// flat pulsing bars while the track decodes, so the layout never jumps
+const LOADING_PEAKS = Array<number>(WAVEFORM_BARS).fill(0.1)
+
+// SoundCloud-style bars, with the same transparent native range on top as Slider
+function Waveform({ peaks, value, onChange }: WaveformProps): React.JSX.Element {
+  const { t } = useTranslation()
+  const bars = peaks ?? LOADING_PEAKS
+  return (
+    <div className={`relative flex h-12 items-center gap-px ${peaks ? '' : 'animate-pulse'}`}>
+      {bars.map((peak, i) => (
+        <div
+          key={i}
+          className={`flex-1 rounded-full transition-[height] duration-300 ${i / bars.length < value ? 'bg-white' : 'bg-white/30'}`}
+          style={{ height: `${Math.max(peak * 100, 6)}%` }}
+        />
+      ))}
+      <input
+        type="range"
+        min={0}
+        max={1}
+        step="any"
+        value={value}
+        aria-label={t('position')}
         onChange={(e) => onChange(e.target.valueAsNumber)}
         className="absolute inset-0 w-full cursor-pointer opacity-0"
       />

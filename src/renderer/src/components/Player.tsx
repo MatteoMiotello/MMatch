@@ -2,6 +2,7 @@ import { useEffect, useEffectEvent, useState, type RefObject } from 'react'
 import type { Track } from '../../../shared/types'
 import { useTranslation } from 'react-i18next'
 import { analyze, type Analysis } from '../lib/analysis'
+import { waveform } from '../lib/waveform'
 import { formatKey } from '../lib/music'
 import type { Settings } from '../lib/settings'
 import { Cover } from './Cover'
@@ -17,6 +18,7 @@ export function Player({ track, settings, audioRef }: Props): React.JSX.Element 
   const { t } = useTranslation()
   const [src, setSrc] = useState<string>()
   const [cover, setCover] = useState<string | null>(null)
+  const [peaks, setPeaks] = useState<number[] | null>(null)
   // null until essentia has answered; only ever started when a tag is missing
   const [detected, setDetected] = useState<Analysis | null>(null)
   const { path, playable } = track
@@ -48,6 +50,9 @@ export function Player({ track, settings, audioRef }: Props): React.JSX.Element 
       if (controller.signal.aborted) return
       url = URL.createObjectURL(new Blob([data as BlobPart]))
       setSrc(url)
+      waveform(data)
+        .then((p) => controller.signal.aborted || setPeaks(p))
+        .catch(() => {})
       analyzeIfUntagged(data, controller.signal)
     })
 
@@ -84,7 +89,7 @@ export function Player({ track, settings, audioRef }: Props): React.JSX.Element 
       </div>
 
       {playable && <audio ref={audioRef} src={src} autoPlay />}
-      {playable && <AudioControls audioRef={audioRef} />}
+      {playable && <AudioControls audioRef={audioRef} peaks={peaks} />}
       {!playable && <UnplayableNote />}
     </div>
   )
