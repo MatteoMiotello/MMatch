@@ -1,5 +1,5 @@
-appId: com.matteomiotello.mmatch
-productName: MMatch
+appId: com.matteomiotello.picky
+productName: Picky
 directories:
   buildResources: build
 files:
@@ -12,7 +12,7 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: mmatch
+  executableName: picky
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}

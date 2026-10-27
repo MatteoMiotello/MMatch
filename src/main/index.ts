@@ -1,5 +1,5 @@
 import { app, BrowserWindow, dialog, ipcMain } from 'electron'
-import type { Dirent } from 'node:fs'
+import { existsSync, type Dirent } from 'node:fs'
 import { readdir, readFile, rename, stat, writeFile } from 'node:fs/promises'
 import { basename, extname, join } from 'node:path'
 import { parseFile, selectCover } from 'music-metadata'
@@ -7,6 +7,10 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { toM3u8, toNml } from './export'
 import type { ExportFormat, Playlist, Track } from '../shared/types'
+
+// 1.0.0 shipped as MMatch: keep using its folder, since Electron creates the new one before we could move it
+const legacyData = join(app.getPath('appData'), 'mmatch')
+if (existsSync(legacyData)) app.setPath('userData', legacyData)
 
 const AUDIO = /\.(mp3|wav|flac|m4a|aac|ogg|aif|aiff)$/i
 const UNPLAYABLE = /\.(aif|aiff)$/i
@@ -83,7 +87,7 @@ async function pickFolder(): Promise<string | null> {
 async function exportPlaylist(
   tracks: Track[],
   format: ExportFormat,
-  name = 'MMatch'
+  name = 'Picky'
 ): Promise<string | null> {
   const result = await dialog.showSaveDialog({
     defaultPath: `${name}.${format}`,
@@ -177,7 +181,7 @@ function createWindow(): void {
 }
 
 app.whenReady().then(() => {
-  electronApp.setAppUserModelId('com.mmatch')
+  electronApp.setAppUserModelId('com.matteomiotello.picky')
   // packaged builds take build/icon.icns; this shows the logo in the dock during `yarn dev` too
   if (process.platform === 'darwin') app.dock?.setIcon(icon)
   app.on('browser-window-created', (_, window) => optimizer.watchWindowShortcuts(window))

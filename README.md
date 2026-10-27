@@ -1,16 +1,16 @@
 <p align="center">
-  <img src="src/renderer/src/assets/logo.png" alt="MMatch" width="200">
+  <img src="src/renderer/src/assets/logo.png" alt="Picky" width="200">
 </p>
 
 <p align="center"><strong>Listen, match, play.</strong><br>Tinder for tracks: swipe through a folder of music, keep the good ones, export a playlist for Traktor.</p>
 
 <p align="center">
-  <img src="docs/player.png" alt="The MMatch player" width="520">
+  <img src="docs/player.png" alt="The Picky player" width="520">
 </p>
 
 ## Why
 
-A DJ ends up with hundreds of new tracks: promos, Beatport, Bandcamp. Going through them in a regular player is slow, you lose track of what you've heard, and the playlist has to be rebuilt by hand. MMatch shows one track at a time and asks one question: **keep** or **skip**.
+A DJ ends up with hundreds of new tracks: promos, Beatport, Bandcamp. Going through them in a regular player is slow, you lose track of what you've heard, and the playlist has to be rebuilt by hand. Picky shows one track at a time and asks one question: **keep** or **skip**.
 
 ## Features
 
@@ -34,7 +34,7 @@ A DJ ends up with hundreds of new tracks: promos, Beatport, Bandcamp. Going thro
 - Resume where you left off: tracks already seen are never shown again
 - Home with mosaic covers, search, clone, rename, delete
 - Pull tracks from several folders (subfolders included), hide one for a while
-- Unplugged drive? MMatch asks where the folder is now, without losing your progress
+- Unplugged drive? Picky asks where the folder is now, without losing your progress
 
 **Export**
 - **NML** for Traktor
@@ -58,7 +58,7 @@ Download the `.dmg` from [Releases](../../releases). The app isn't notarized by 
 If macOS says the app is "damaged", remove the quarantine flag:
 
 ```bash
-xattr -cr /Applications/MMatch.app
+xattr -cr /Applications/Picky.app
 ```
 
 Built and tested on macOS (Apple Silicon). Windows and Linux builds are configured but untested.
@@ -75,4 +75,4 @@ yarn typecheck
 yarn build:mac  # .dmg in dist/
 ```
 
-Playlists live in `playlists.json` inside the app data folder (`~/Library/Application Support/mmatch` on macOS), so they survive app updates.
+Playlists live in `playlists.json` inside the app data folder (`~/Library/Application Support/Picky` on macOS, or `mmatch` for installs upgraded from MMatch 1.0.0), so they survive app updates.

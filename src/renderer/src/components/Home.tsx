@@ -53,7 +53,7 @@ export function Home({
       <header className="flex items-start justify-between gap-6">
         <div>
           <h1>
-            <img src={logo} alt="MMatch" className="h-14 w-auto sm:h-16" />
+            <img src={logo} alt="Picky" className="h-14 w-auto sm:h-16" />
           </h1>
           <p className="mt-2 text-neutral-400">{t('tagline')}</p>
         </div>

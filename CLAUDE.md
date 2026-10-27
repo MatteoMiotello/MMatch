@@ -1,4 +1,4 @@
-# MMatch
+# Picky
 
 App desktop "Tinder per tracce": il DJ sceglie una cartella, ascolta una traccia alla volta e decide **keep** o **skip**. Le tracce keep si esportano come playlist.
 

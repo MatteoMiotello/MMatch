@@ -1,5 +1,5 @@
 {
-  "name": "mmatch",
+  "name": "picky",
   "version": "1.0.0",
   "description": "Swipe tracks, keep the good ones, export a playlist",
   "main": "./out/main/index.js",

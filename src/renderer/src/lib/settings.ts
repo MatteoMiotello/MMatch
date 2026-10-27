@@ -13,7 +13,9 @@ export type Settings = {
   showKbps: boolean
 }
 
-const STORAGE_KEY = 'mmatch.settings'
+const STORAGE_KEY = 'picky.settings'
+// ponytail: key from the MMatch days, drop once nobody upgrades from 1.0.0
+const LEGACY_STORAGE_KEY = 'mmatch.settings'
 
 const DEFAULTS: Settings = {
   locale: systemLocale(),
@@ -27,7 +29,12 @@ const DEFAULTS: Settings = {
 
 function load(): Settings {
   try {
-    return { ...DEFAULTS, ...JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}') }
+    return {
+      ...DEFAULTS,
+      ...JSON.parse(
+        localStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(LEGACY_STORAGE_KEY) ?? '{}'
+      )
+    }
   } catch {
     return DEFAULTS
   }

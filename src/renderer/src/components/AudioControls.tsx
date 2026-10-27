@@ -2,11 +2,13 @@ import { useEffect, useState, type RefObject } from 'react'
 import { useTranslation } from 'react-i18next'
 import { WAVEFORM_BARS } from '../lib/waveform'
 
-const VOLUME_KEY = 'mmatch.volume'
+const VOLUME_KEY = 'picky.volume'
+// ponytail: key from the MMatch days, drop once nobody upgrades from 1.0.0
+const LEGACY_VOLUME_KEY = 'mmatch.volume'
 
 function savedVolume(): number {
   try {
-    return Number(localStorage.getItem(VOLUME_KEY) ?? 1)
+    return Number(localStorage.getItem(VOLUME_KEY) ?? localStorage.getItem(LEGACY_VOLUME_KEY) ?? 1)
   } catch {
     return 1
   }
