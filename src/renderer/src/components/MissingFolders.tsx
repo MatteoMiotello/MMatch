@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 type Props = {
   folders: string[]
   onRelink(folder: string): void
@@ -5,12 +6,11 @@ type Props = {
 }
 
 export function MissingFolders({ folders, onRelink, onRetry }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div className="flex w-full max-w-xl flex-col gap-4 rounded-3xl bg-neutral-900 p-5 sm:p-8">
-      <h2 className="text-xl font-semibold">Cartella non trovata</h2>
-      <p className="text-sm text-neutral-400">
-        Per continuare scegli dove si trova ora. Le track già viste e le keep restano valide.
-      </p>
+      <h2 className="text-xl font-semibold">{t('folderNotFound')}</h2>
+      <p className="text-sm text-neutral-400">{t('folderNotFoundHelp')}</p>
       <ul className="flex flex-col gap-2">
         {folders.map((folder) => (
           <li key={folder} className="flex items-center gap-3 rounded-xl bg-neutral-800 p-3">
@@ -21,13 +21,13 @@ export function MissingFolders({ folders, onRelink, onRetry }: Props): React.JSX
               onClick={() => onRelink(folder)}
               className="shrink-0 rounded-full bg-primary text-white px-4 py-1.5 text-sm font-medium hover:bg-primary-light"
             >
-              Scegli cartella
+              {t('chooseFolder')}
             </button>
           </li>
         ))}
       </ul>
       <button onClick={onRetry} className="self-start text-sm text-neutral-400 hover:text-white">
-        Hai ricollegato il disco? Riprova
+        {t('retry')}
       </button>
     </div>
   )

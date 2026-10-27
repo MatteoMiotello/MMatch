@@ -149,11 +149,17 @@ function deletePlaylist(name: string): Promise<Playlist[]> {
 
 function createWindow(): void {
   const window = new BrowserWindow({
-    width: 1100,
-    height: 720,
+    // the player card is max-w-xl (576px): leave a modest margin around it
+    width: 760,
+    height: 820,
     show: false,
     backgroundColor: '#353535',
     autoHideMenuBar: true,
+    titleBarStyle: 'hidden',
+    // the renderer draws a 36px drag strip: mac centres its traffic lights in it, Windows/Linux overlay their buttons on it
+    ...(process.platform === 'darwin'
+      ? { trafficLightPosition: { x: 14, y: 12 } }
+      : { titleBarOverlay: { color: '#353535', symbolColor: '#ffffff', height: 36 } }),
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),

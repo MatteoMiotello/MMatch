@@ -1,4 +1,5 @@
 import { useId, useRef } from 'react'
+import { useTranslation } from 'react-i18next'
 
 type Props = {
   loading: boolean
@@ -7,6 +8,7 @@ type Props = {
 }
 
 export function NewPlaylist({ loading, taken, onCreate }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const id = useId()
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -14,7 +16,7 @@ export function NewPlaylist({ loading, taken, onCreate }: Props): React.JSX.Elem
     e.preventDefault()
     const input = inputRef.current!
     const name = input.value.trim()
-    input.setCustomValidity(taken(name) ? 'Esiste già una playlist con questo nome' : '')
+    input.setCustomValidity(taken(name) ? t('nameTaken') : '')
     if (!input.reportValidity()) return
     e.currentTarget.hidePopover()
     input.value = ''
@@ -26,10 +28,10 @@ export function NewPlaylist({ loading, taken, onCreate }: Props): React.JSX.Elem
       <button
         popoverTarget={id}
         disabled={loading}
-        className="flex items-center gap-2 rounded-full bg-primary text-white px-6 py-3 font-semibold transition-colors hover:bg-primary-light disabled:opacity-60"
+        className="flex items-center gap-2 rounded-full bg-primary text-white px-4 py-2.5 text-sm font-semibold transition-colors hover:bg-primary-light disabled:opacity-60"
       >
-        <span className="text-xl leading-none">+</span>
-        {loading ? 'Lettura tracce…' : 'Nuova'}
+        <span className="text-base leading-none">+</span>
+        {loading ? t('readingTracks') : t('newPlaylist')}
       </button>
       <form
         id={id}
@@ -40,7 +42,7 @@ export function NewPlaylist({ loading, taken, onCreate }: Props): React.JSX.Elem
         className="inset-auto m-0 mt-2 w-80 max-w-[calc(100vw-2rem)] [position-try-fallbacks:flip-inline] rounded-2xl border border-neutral-700 bg-neutral-900 p-4 text-neutral-100 shadow-2xl [position-area:bottom_span-left]"
       >
         <label className="flex flex-col gap-2 text-sm font-medium">
-          Nome playlist
+          {t('playlistName')}
           <input
             ref={inputRef}
             required
@@ -49,7 +51,7 @@ export function NewPlaylist({ loading, taken, onCreate }: Props): React.JSX.Elem
           />
         </label>
         <button className="mt-3 w-full rounded-lg bg-primary text-white py-2 text-sm font-medium hover:bg-primary-light">
-          Avanti →
+          {t('next')}
         </button>
       </form>
     </>

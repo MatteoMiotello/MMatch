@@ -10,7 +10,7 @@ Usa questi termini identici in codice, UI e discussione:
 - **export**: scrittura della lista keep in M3U8 o NML, formato scelto dall'utente al momento
 
 ## Stack
-Electron + React (electron-vite), TypeScript strict, Tailwind CSS v4 (plugin `@tailwindcss/vite`). Stile solo con classi Tailwind nel JSX; un file CSS unico con `@import "tailwindcss"`. Stato locale con `useState`/`useReducer`, app a schermata singola. Player = `<audio>` nativo. BPM e key da tag con `music-metadata`; quando il tag manca li calcola `essentia.js` in un Web Worker (`src/renderer/src/lib/analysis.ts`).
+Electron + React (electron-vite), TypeScript strict, Tailwind CSS v4 (plugin `@tailwindcss/vite`). Stile solo con classi Tailwind nel JSX; un file CSS unico con `@import "tailwindcss"`. Stato locale con `useState`/`useReducer`, app a schermata singola. Player = `<audio>` nativo. BPM e key da tag con `music-metadata`; quando il tag manca li calcola `essentia.js` in un Web Worker (`src/renderer/src/lib/analysis.ts`). Testi UI con `react-i18next`: chiavi in `src/renderer/src/lib/i18n.ts` (`en` + `it`), niente stringhe letterali nel JSX.
 
 ## Confini main / renderer
 Il main process possiede filesystem, metadata ed export. Il renderer vede soltanto le funzioni di `Api` in `src/shared/types.ts`, esposte dal preload su `window.api`. L'audio arriva al renderer come bytes (`readAudio`) e diventa un blob URL: così il seek funziona senza protocolli custom. Ogni nuova capacità di sistema passa da qui come funzione esplicita.

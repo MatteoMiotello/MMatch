@@ -1,5 +1,7 @@
+import { useTranslation } from 'react-i18next'
 import type { KeyNotation } from '../lib/music'
 import type { Settings } from '../lib/settings'
+import { LOCALE_NAMES, type Locale } from '../lib/i18n'
 
 // essentia's RhythmExtractor accepts tempos only in this range
 const BPM_LIMITS = { min: 40, max: 208 }
@@ -7,13 +9,14 @@ const SETTINGS_ID = 'settings'
 
 const NOTATIONS: { value: KeyNotation; label: string }[] = [
   { value: 'camelot', label: 'Camelot (8A)' },
-  { value: 'musical', label: 'Musicale (Am)' },
+  { value: 'musical', label: 'Musical (Am)' },
   { value: 'openkey', label: 'Open Key (1m)' }
 ]
 
 export function SettingsButton({ className }: { className: string }): React.JSX.Element {
+  const { t } = useTranslation()
   return (
-    <button popoverTarget={SETTINGS_ID} aria-label="Impostazioni" className={className}>
+    <button popoverTarget={SETTINGS_ID} aria-label={t('settings')} className={className}>
       <svg viewBox="0 0 24 24" className="size-5 fill-none stroke-current stroke-2">
         <path d="M4 7h16M4 17h16" strokeLinecap="round" />
         <circle cx="9" cy="7" r="2.5" className="fill-neutral-800" />
@@ -26,6 +29,7 @@ export function SettingsButton({ className }: { className: string }): React.JSX.
 type Props = { settings: Settings; onChange(settings: Settings): void }
 
 export function SettingsPanel({ settings, onChange }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const set = (patch: Partial<Settings>): void => onChange({ ...settings, ...patch })
 
   return (
@@ -34,16 +38,31 @@ export function SettingsPanel({ settings, onChange }: Props): React.JSX.Element 
       popover="auto"
       className="w-80 max-w-[calc(100vw-2rem)] rounded-2xl border border-neutral-700 bg-neutral-900 p-5 text-neutral-100 shadow-2xl backdrop:bg-black/50"
     >
-      <h2 className="mb-4 text-lg font-semibold">Impostazioni</h2>
+      <h2 className="mb-4 text-lg font-semibold">{t('settings')}</h2>
+
+      <label className="mb-4 flex items-center justify-between gap-3 border-b border-neutral-800 pb-4 text-sm font-medium">
+        {t('language')}
+        <select
+          value={settings.locale}
+          onChange={(e) => set({ locale: e.target.value as Locale })}
+          className="rounded-lg bg-neutral-800 px-2 py-1.5"
+        >
+          {Object.entries(LOCALE_NAMES).map(([value, name]) => (
+            <option key={value} value={value}>
+              {name}
+            </option>
+          ))}
+        </select>
+      </label>
 
       <section className="flex flex-col gap-3 border-b border-neutral-800 pb-4">
         <Toggle
-          label="Mostra key"
+          label={t('showKey')}
           checked={settings.showKey}
           onChange={(showKey) => set({ showKey })}
         />
         <label className="flex items-center justify-between gap-3 text-sm">
-          Notazione
+          {t('notation')}
           <select
             value={settings.keyNotation}
             disabled={!settings.showKey}
@@ -52,7 +71,7 @@ export function SettingsPanel({ settings, onChange }: Props): React.JSX.Element 
           >
             {NOTATIONS.map((n) => (
               <option key={n.value} value={n.value}>
-                {n.label}
+                {n.value === 'musical' ? t('notationMusical') : n.label}
               </option>
             ))}
           </select>
@@ -61,12 +80,12 @@ export function SettingsPanel({ settings, onChange }: Props): React.JSX.Element 
 
       <section className="flex flex-col gap-3 py-4">
         <Toggle
-          label="Mostra BPM"
+          label={t('showBpm')}
           checked={settings.showBpm}
           onChange={(showBpm) => set({ showBpm })}
         />
         <div className="flex items-center justify-between gap-3 text-sm">
-          Range analisi
+          {t('bpmRange')}
           <span className="flex items-center gap-2">
             <BpmInput
               value={settings.bpmMin}
@@ -83,15 +102,12 @@ export function SettingsPanel({ settings, onChange }: Props): React.JSX.Element 
             />
           </span>
         </div>
-        <p className="text-xs text-neutral-500">
-          Solo per i BPM calcolati: un tempo dimezzato o doppio viene riportato nel range. Quelli
-          dei tag restano invariati.
-        </p>
+        <p className="text-xs text-neutral-500">{t('bpmRangeHelp')}</p>
       </section>
 
       <section className="flex flex-col gap-3 border-t border-neutral-800 pt-4">
         <Toggle
-          label="Mostra kbps"
+          label={t('showKbps')}
           checked={settings.showKbps}
           onChange={(showKbps) => set({ showKbps })}
         />

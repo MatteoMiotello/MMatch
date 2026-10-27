@@ -8,6 +8,7 @@ import { Home } from './components/Home'
 import { FolderBar } from './components/FolderBar'
 import { SettingsButton, SettingsPanel } from './components/SettingsPanel'
 import { useSettings } from './lib/settings'
+import { useTranslation } from 'react-i18next'
 import { relinkSession, type Session } from './lib/session'
 import { MissingFolders } from './components/MissingFolders'
 import { SwipeCard, SWIPE_MS, type Decision } from './components/SwipeCard'
@@ -45,6 +46,7 @@ export default function App(): React.JSX.Element {
   const [seenBefore, setSeenBefore] = useState<string[]>([])
   const [playlists, setPlaylists] = useState<Playlist[]>([])
   const [settings, setSettings] = useSettings()
+  const { t } = useTranslation()
   const audioRef = useRef<HTMLAudioElement>(null)
   const requestedTags = useRef(new Set<string>())
   const track = tracks[index]
@@ -210,7 +212,8 @@ export default function App(): React.JSX.Element {
 
   if (!folders.length) {
     return (
-      <div className="h-dvh bg-neutral-950 text-neutral-100">
+      <div className="flex h-dvh flex-col bg-neutral-950 text-neutral-100">
+        <TitleBar />
         {error && <p className="px-5 pt-6 text-sm text-red-400 sm:px-10">{error}</p>}
         <Home
           playlists={playlists}
@@ -226,10 +229,11 @@ export default function App(): React.JSX.Element {
 
   return (
     <div className="flex h-dvh flex-col bg-neutral-950 text-neutral-100">
+      <TitleBar />
       <header className="flex flex-wrap items-center gap-2 p-4 pr-20">
         <button
           onClick={goHome}
-          aria-label="Home"
+          aria-label={t('home')}
           className="rounded-full bg-neutral-800 p-2.5 hover:bg-neutral-700"
         >
           <svg viewBox="0 0 24 24" className="size-5 fill-none stroke-current stroke-2">
@@ -250,8 +254,8 @@ export default function App(): React.JSX.Element {
           onRelink={relink}
         />
       </header>
-      <main className="flex min-h-0 flex-1 flex-col items-center justify-center gap-6 overflow-x-hidden overflow-y-auto px-4 pb-6 sm:gap-8 sm:px-8">
-        {name && <h1 className="font-semibold">{name}</h1>}
+      {name && <h1 className="truncate px-4 pb-4 text-center text-lg font-semibold">{name}</h1>}
+      <main className="flex min-h-0 flex-1 flex-col items-center justify-center-safe gap-6 overflow-x-hidden overflow-y-auto px-4 pb-6 sm:gap-8 sm:px-8">
         {error && <p className="max-w-xl text-center text-sm text-red-400">{error}</p>}
         {track && (
           <SwipeCard key={track.path} leaving={leaving} onSwipe={decide}>
@@ -265,7 +269,7 @@ export default function App(): React.JSX.Element {
             onRetry={() => load(current(), name)}
           />
         )}
-        {finished && <p className="text-xl">Finito! {kept.length} tracce keep.</p>}
+        {finished && <p className="text-xl">{t('finished', { count: kept.length })}</p>}
 
         {tracks.length > 0 && (
           <p className="text-sm text-neutral-500">
@@ -286,4 +290,8 @@ export default function App(): React.JSX.Element {
       />
     </div>
   )
+}
+
+function TitleBar(): React.JSX.Element {
+  return <div className="h-9 shrink-0 [app-region:drag]" />
 }

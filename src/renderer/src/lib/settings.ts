@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import type { KeyNotation } from './music'
+import i18n from 'i18next'
+import { systemLocale, type Locale } from './i18n'
 
 export type Settings = {
+  locale: Locale
   showKey: boolean
   keyNotation: KeyNotation
   showBpm: boolean
@@ -13,6 +16,7 @@ export type Settings = {
 const STORAGE_KEY = 'mmatch.settings'
 
 const DEFAULTS: Settings = {
+  locale: systemLocale(),
   showKey: true,
   keyNotation: 'camelot',
   showBpm: true,
@@ -30,10 +34,16 @@ function load(): Settings {
 }
 
 export function useSettings(): [Settings, (settings: Settings) => void] {
-  const [settings, setSettings] = useState(load)
+  const [settings, setSettings] = useState(() => {
+    const saved = load()
+    // before the first render, so the app never flashes in the system language
+    i18n.changeLanguage(saved.locale)
+    return saved
+  })
 
   function update(next: Settings): void {
     setSettings(next)
+    i18n.changeLanguage(next.locale)
     localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
   }
 

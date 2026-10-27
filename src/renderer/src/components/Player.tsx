@@ -1,5 +1,6 @@
 import { useEffect, useEffectEvent, useState, type RefObject } from 'react'
 import type { Track } from '../../../shared/types'
+import { useTranslation } from 'react-i18next'
 import { analyze, type Analysis } from '../lib/analysis'
 import { formatKey } from '../lib/music'
 import type { Settings } from '../lib/settings'
@@ -13,6 +14,7 @@ type Props = {
 }
 
 export function Player({ track, settings, audioRef }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const [src, setSrc] = useState<string>()
   const [cover, setCover] = useState<string | null>(null)
   // null until essentia has answered; only ever started when a tag is missing
@@ -64,7 +66,7 @@ export function Player({ track, settings, audioRef }: Props): React.JSX.Element 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="min-w-0">
           <h1 className="truncate text-xl font-semibold sm:text-2xl">{track.title}</h1>
-          <p className="truncate text-neutral-400">{track.artist ?? 'Artista sconosciuto'}</p>
+          <p className="truncate text-neutral-400">{track.artist ?? t('unknownArtist')}</p>
         </div>
         <div className="flex shrink-0 gap-2">
           {settings.showKey && (
@@ -91,11 +93,15 @@ export function Player({ track, settings, audioRef }: Props): React.JSX.Element 
 type StatProps = { value?: string | number; loading: boolean; label: string }
 
 function Stat({ value, loading, label }: StatProps): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div className="flex min-w-16 flex-col items-center rounded-xl bg-black/30 px-3 py-2">
       {value !== undefined && <p className="text-2xl font-bold tabular-nums">{value}</p>}
       {value === undefined && loading && (
-        <p className="my-1 h-6 w-10 animate-pulse rounded bg-white/20" aria-label="Analisi…" />
+        <p
+          className="my-1 h-6 w-10 animate-pulse rounded bg-white/20"
+          aria-label={t('analyzing')}
+        />
       )}
       {value === undefined && !loading && <p className="text-2xl font-bold text-neutral-600">–</p>}
       <p className="text-xs text-neutral-400">{label}</p>
@@ -114,9 +120,10 @@ function CoverGlow({ src }: { src: string }): React.JSX.Element {
 }
 
 function UnplayableNote(): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <p className="rounded-xl bg-black/30 px-3 py-2.5 text-sm text-amber-300 backdrop-blur-md">
-      AIFF non riproducibile: decidi o passa oltre.
+      {t('unplayable')}
     </p>
   )
 }

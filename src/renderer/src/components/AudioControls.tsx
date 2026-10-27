@@ -1,4 +1,5 @@
 import { useEffect, useState, type RefObject } from 'react'
+import { useTranslation } from 'react-i18next'
 
 const VOLUME_KEY = 'mmatch.volume'
 
@@ -19,6 +20,7 @@ function formatTime(seconds: number): string {
 type Props = { audioRef: RefObject<HTMLAudioElement | null> }
 
 export function AudioControls({ audioRef }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const [time, setTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [volume, setVolume] = useState(savedVolume)
@@ -65,13 +67,13 @@ export function AudioControls({ audioRef }: Props): React.JSX.Element {
 
   return (
     <div className="flex flex-col gap-2 rounded-xl bg-black/30 px-3 py-2.5 text-white backdrop-blur-md">
-      <Slider label="Posizione" value={duration ? time / duration : 0} onChange={seek} />
+      <Slider label={t('position')} value={duration ? time / duration : 0} onChange={seek} />
       <div className="flex items-center justify-between text-xs text-white/70 tabular-nums">
         <span>
           {formatTime(time)} / {formatTime(duration)}
         </span>
         <div className="flex w-28 items-center gap-2">
-          <button onClick={toggleMute} aria-label={muted ? 'Riattiva audio' : 'Muto'}>
+          <button onClick={toggleMute} aria-label={muted ? t('unmute') : t('mute')}>
             <VolumeIcon muted={muted || volume === 0} />
           </button>
           <Slider label="Volume" value={muted ? 0 : volume} onChange={changeVolume} />

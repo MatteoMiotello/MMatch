@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import type { Playlist, Track } from '../../../shared/types'
 import { PlaylistMenu } from './PlaylistMenu'
 
@@ -25,25 +26,24 @@ export function PlaylistCard({
   onClone,
   onDelete
 }: Props): React.JSX.Element {
+  const { t } = useTranslation()
   const [renaming, setRenaming] = useState(false)
-  const [firstFolder, ...otherFolders] = playlist.folders.map((f) => f.split('/').at(-1))
-  const folderNames = otherFolders.length ? `${firstFolder} +${otherFolders.length}` : firstFolder
   const empty = playlist.kept.length === 0
 
   const items = [
-    { label: 'Rinomina', onClick: () => setRenaming(true) },
-    { label: 'Clona', onClick: onClone },
+    { label: t('rename'), onClick: () => setRenaming(true) },
+    { label: t('clone'), onClick: onClone },
     {
-      label: 'Esporta M3U8',
+      label: t('exportAs', { format: 'M3U8' }),
       disabled: empty,
       onClick: () => window.api.exportPlaylist(playlist.kept, 'm3u8', playlist.name)
     },
     {
-      label: 'Esporta NML',
+      label: t('exportAs', { format: 'NML' }),
       disabled: empty,
       onClick: () => window.api.exportPlaylist(playlist.kept, 'nml', playlist.name)
     },
-    { label: 'Elimina', danger: true, onClick: onDelete }
+    { label: t('delete'), danger: true, onClick: onDelete }
   ]
 
   function rename(name: string): void {
@@ -57,7 +57,7 @@ export function PlaylistCard({
       <button
         onClick={onOpen}
         disabled={disabled}
-        aria-label={`Apri ${playlist.name}`}
+        aria-label={t('open', { name: playlist.name })}
         className="absolute inset-0 rounded-2xl"
       />
       {/* clicks fall through the cover to the stretched button below */}
@@ -72,7 +72,7 @@ export function PlaylistCard({
           )}
           {!renaming && <p className="truncate font-semibold">{playlist.name}</p>}
           <p className="truncate text-sm text-neutral-400">
-            {playlist.kept.length} keep · {folderNames}
+            {t('trackCount', { count: playlist.kept.length })}
           </p>
         </div>
         <PlaylistMenu items={items} />
@@ -84,6 +84,7 @@ export function PlaylistCard({
 type RenameInputProps = { name: string; onDone(name: string): void; onCancel(): void }
 
 function RenameInput({ name, onDone, onCancel }: RenameInputProps): React.JSX.Element {
+  const { t } = useTranslation()
   const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -94,7 +95,7 @@ function RenameInput({ name, onDone, onCancel }: RenameInputProps): React.JSX.El
 
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>): void {
     if (e.key === 'Enter') onDone(e.currentTarget.value.trim())
-    if (e.key === 'Escape' && confirm('Annullare la modifica del nome?')) onCancel()
+    if (e.key === 'Escape' && confirm(t('confirmCancelRename'))) onCancel()
   }
 
   return (
@@ -144,10 +145,11 @@ function CoverMosaic({ tracks }: { tracks: Track[] }): React.JSX.Element {
 }
 
 function OpeningOverlay(): React.JSX.Element {
+  const { t } = useTranslation()
   return (
     <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-neutral-950/60">
       <span
-        aria-label="Apertura…"
+        aria-label={t('opening')}
         className="size-9 animate-spin rounded-full border-3 border-white/30 border-t-primary"
       />
     </div>
