@@ -4,7 +4,7 @@ import type { Playlist, Track } from '../../../shared/types'
 import { PlaylistMenu } from './PlaylistMenu'
 
 const MOSAIC_SIZE = 4
-// many tracks have no artwork, so sample extra to still fill the mosaic
+// many tracks have no artwork, so look further than 4 to still fill the mosaic
 const SAMPLE_SIZE = 12
 
 type Props = {
@@ -112,8 +112,8 @@ function CoverMosaic({ tracks }: { tracks: Track[] }): React.JSX.Element {
   const [covers, setCovers] = useState<string[]>([])
 
   useEffect(() => {
-    // ponytail: sort-by-random shuffle is biased, fine for picking artwork
-    const sample = [...tracks].sort(() => Math.random() - 0.5).slice(0, SAMPLE_SIZE)
+    // the first keeps, in order, so a playlist always shows the same cover
+    const sample = tracks.slice(0, SAMPLE_SIZE)
     Promise.all(sample.map((t) => window.api.readCover(t.path))).then((found) =>
       setCovers(found.filter((c) => c !== null).slice(0, MOSAIC_SIZE))
     )
