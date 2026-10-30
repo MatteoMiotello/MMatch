@@ -53,7 +53,7 @@ MP3, WAV, FLAC, M4A/AAC, OGG. AIFF files are listed but can't be played (Chromiu
 
 ## Install
 
-Download the `.dmg` from [Releases](../../releases). The app isn't notarized by Apple, so on first launch macOS says it's from an unidentified developer: right-click the app → **Open**.
+Download the `.dmg` from [Releases](../../releases). The app isn't notarized by Apple, so macOS blocks it on first launch: click **Done**, then open **System Settings → Privacy & Security** and click **Open Anyway** next to Picky. The DMG includes the same steps in `Come aprire Picky.txt`.
 
 If macOS says the app is "damaged", remove the quarantine flag:
 

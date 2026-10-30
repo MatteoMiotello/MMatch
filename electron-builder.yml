@@ -29,6 +29,13 @@ mac:
   notarize: false
 dmg:
   artifactName: ${name}-${version}.${ext}
+  window:
+    width: 660
+    height: 400
+  contents:
+    - { x: 130, y: 180 }
+    - { x: 330, y: 180, type: link, path: /Applications }
+    - { x: 530, y: 180, type: file, path: 'build/Come aprire Picky.txt' }
 linux:
   target:
     - AppImage
